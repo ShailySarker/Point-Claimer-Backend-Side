@@ -1,47 +1,33 @@
 import { NextFunction, Request, Response } from "express";
+import { ZodError } from "zod";
 
 export const globalErrorHandler = (error: any, req: Request, res: Response, next: NextFunction) => {
 
-    // validation error
-    if (error.name === 'ValidationError') {
-        res.status(400).json({
-            message: 'Validation failed',
+    let payload: any = { success: false, error: error };
+
+    if (error instanceof ZodError) {
+        const issues = error.issues.map(issue => ({
+            path: issue.path.join('.'),
+            code: issue.code,
+            message: issue.message,
+            origin: (issue as any).origin,
+            minimum: (issue as any).minimum,
+            inclusive: (issue as any).inclusive
+        }));
+
+        payload = {
             success: false,
-            error: {
-                name: error.name,
-                errors: error.errors
-            }
-        })
-    }
-    // cast error
-    else if (error.name === "CastError") {
-        res.status(404).json({
-            message: 'Book is not found',
+            message: issues[0].message,
+            issues
+        };
+    } else {
+        payload = {
             success: false,
-            error: {
-                name: error.name,
-                errors: error
-            }
-        })
+            message: error.message || 'Something went wrong',
+            error: error
+        };
     }
-    // duplicate key error
-    else if (error.name === "MongoServerError" && error.code === 11000) {
-        res.status(409).json({
-            message: "Duplicate key error",
-            success: false,
-            error: {
-                name: error.name,
-                errors: error,
-            }
-        });
-    }
-    // others error
-    else {
-        res.status(400).json({
-            message: error.message || 'Sorry! Something went wrong.',
-            success: false,
-            error
-        });
-    }
+
+    return res.status(400).json(payload);
 
 };
