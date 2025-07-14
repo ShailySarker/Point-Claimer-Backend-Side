@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { UserRouters } from "./user.route";
+import { HistoryRoutes } from "./history.route";
 
 export const baseRoute = Router();
 
@@ -8,10 +9,10 @@ const moduleRoutes = [
         path: "/users",
         route: UserRouters
     },
-    // {
-    //     path: "/history",
-    //     route: AuthRoutes
-    // },
+    {
+        path: "/history",
+        route: HistoryRoutes
+    },
 ];
 
 
