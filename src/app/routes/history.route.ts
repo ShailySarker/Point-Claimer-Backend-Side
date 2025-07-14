@@ -3,6 +3,6 @@ import { HistoryControllers } from "../controllers/history.controller";
 
 const router = Router();
 
-router.post("/:userId/claim", HistoryControllers.claimPoints);
+router.get("/all-history", HistoryControllers.getHistory);
 
 export const HistoryRoutes = router;
