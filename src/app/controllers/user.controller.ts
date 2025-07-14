@@ -31,6 +31,28 @@ const addUser = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
+
+const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
+
+    try {
+        const users = await User.find().sort({ points: -1 });
+
+        res.status(200).json({
+            success: true,
+            message: "Users info retrieved successfully",
+            data: users,
+        });
+
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+
+};
+
+
 export const UserControllers = {
     addUser,
+    getAllUsers,
+
 }

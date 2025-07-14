@@ -5,7 +5,7 @@ export const baseRoute = Router();
 
 const moduleRoutes = [
     {
-        path: "/user",
+        path: "/users",
         route: UserRouters
     },
     // {
