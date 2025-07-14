@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const historySchema = z.object({
+export const historyValidation = z.object({
     userId: z
         .string({ message: 'User ID is required' })
     // .min(1, 'User ID is required')

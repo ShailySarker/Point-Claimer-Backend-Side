@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const userSchema = z.object({
+export const userValidation = z.object({
     name: z
         .string({ message: "Name must be a string!" })
         .min(2, { message: "Name must be at least 2 characters long." })
