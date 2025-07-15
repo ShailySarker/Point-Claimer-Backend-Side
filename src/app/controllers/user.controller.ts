@@ -35,11 +35,38 @@ const addUser = async (req: Request, res: Response, next: NextFunction) => {
 const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
 
     try {
+        const page = Math.max(1, parseInt(req.query.page as string) || 1);
+        const limit = 10;
+        const skip = (page - 1) * limit;
+
+        const [total, users] = await Promise.all([
+            User.countDocuments(),
+            User.find().skip(skip).limit(limit).lean(),
+        ]);
+
+        res.json({
+            success: true,
+            data: users,
+            page,
+            totalPages: Math.ceil(total / limit),
+            total,
+        });
+
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+
+};
+
+const getUsersLeaderboardInfo = async (req: Request, res: Response, next: NextFunction) => {
+
+    try {
         const users = await User.find().sort({ points: -1 });
 
         res.status(200).json({
             success: true,
-            message: "Users info retrieved successfully",
+            message: "Users leadership info retrieved successfully",
             data: users,
         });
 
@@ -50,14 +77,13 @@ const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
 
 };
 
-
 const claimPoints = async (req: Request, res: Response, next: NextFunction) => {
 
     try {
         const { userId } = req.params;
         const points = Math.floor(Math.random() * 10) + 1;
         // console.log(userId, points);
-        
+
         const user = await User.findByIdAndUpdate(
             userId,
             { $inc: { points } },
@@ -90,6 +116,7 @@ const claimPoints = async (req: Request, res: Response, next: NextFunction) => {
 export const UserControllers = {
     addUser,
     getAllUsers,
+    getUsersLeaderboardInfo,
     claimPoints
 
 };

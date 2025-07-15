@@ -5,6 +5,7 @@ const router = Router();
 
 router.post("/add-user", UserControllers.addUser);
 router.get("/", UserControllers.getAllUsers);
+router.get("/leaderboard", UserControllers.getUsersLeaderboardInfo);
 router.post("/:userId/claim", UserControllers.claimPoints);
 
 

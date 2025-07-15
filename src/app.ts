@@ -9,6 +9,13 @@ const app: Application = express();
 app.use(cors());
 app.use(express.json());
 
+// cors
+app.use(
+    cors({
+        origin: ['http://localhost:5173']
+    })
+);
+
 
 // route
 app.use("/api/v1/", baseRoute);
