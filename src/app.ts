@@ -12,7 +12,7 @@ app.use(express.json());
 // cors
 app.use(
     cors({
-        origin: ['http://localhost:5173']
+        origin: ['http://localhost:5173', "https://point-claimer-frontend.vercel.app"]
     })
 );
 
